@@ -10,21 +10,21 @@ inputs:
     default: '5.7'
     required: false
   db_name:
+    description: "The DB name. Default is [test]"
     required: false
     default: 'test'
-    description: "The DB name. Default is [test]"
   db_username:
+    description: "The DB username. Default is [user]"
     required: false
     default: 'user'
-    description: "The DB username. Default is [user]"
   db_password:
     required: false
     default: 'password'
     description: "The DB password. Default is [password]"
   db_port:
-    required: false
-    default: 3306
     description: "The DB port. Default is [3306]"
+    required: false
+    default: '3306'
 
 runs:
   using: "composite"
