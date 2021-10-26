@@ -43,7 +43,6 @@ runs:
         collation server: 'utf8_general_ci'
         mysql version: ${{ inputs.mysql_version }}
         mysql database: ${{ inputs.db_name }}
-        mysql root password: ${{ inputs.db_password }}
         mysql user: ${{ inputs.db_username }}
         mysql password: ${{ inputs.db_password }}
 
