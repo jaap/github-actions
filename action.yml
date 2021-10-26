@@ -32,8 +32,8 @@ runs:
 
     - name: Shutdown Ubuntu MySQL (SUDO)
       run: sudo service mysql stop
-      shell: bash
       timeout-minutes: 1
+      shell: bash
 
     - name: "Setup MySQL"
       uses: mirromutth/mysql-action@v1.1
