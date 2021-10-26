@@ -28,6 +28,7 @@ inputs:
   sd_github_access_token:
     description: 'Access token to set before running composer.'
     required: false
+    default: false
   extensions:
     description: 'Setup PHP extensions.'
     required: false
