@@ -56,6 +56,7 @@ runs:
     - name: Debug, show db's for user
       run: |
         mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "show databases;"
+        mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "SHOW VARIABLES LIKE "%version%";"
       shell: bash
 
     - name: Setup PHP, with composer and extensions
