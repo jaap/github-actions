@@ -25,13 +25,16 @@ inputs:
     description: "The DB port. Default is [3306]"
     required: false
     default: '3306'
+  sd_github_access_token:
+    description: 'Access token to set before running composer.'
+    required: false
   extensions:
     description: 'Setup PHP extensions.'
     required: false
   ini-values:
     description: 'Add values to php.ini.'
     required: false
-  coverage: 
+  coverage:
     description: 'Setup code coverage driver.'
     required: false
   tools:
@@ -79,19 +82,22 @@ runs:
         key: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-
 
+    - name: Link github token to composer; allows accesing sundata-package on github
+      if: ${{ inputs.sd_github_access_token }}
+      run: composer config -g github-oauth.github.com ${{ inputs.sd_github_access_token }}
+
     - name: Install Composer dependencies
       run: composer install --no-progress --prefer-dist --optimize-autoloader
       shell: bash
-      
+
     - name: Wait for MySQL
       run: |
         while ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent; do
           sleep 1
         done
       shell: bash
-      
+
     - name: Debug MySQL version
       run: |
         mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "SHOW VARIABLES LIKE \"%version%\";"
       shell: bash
-
