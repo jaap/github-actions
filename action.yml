@@ -32,12 +32,10 @@ runs:
 
     - name: Shutdown Ubuntu MySQL (SUDO)
       run: sudo service mysql stop
-      timeout-minutes: 1
       shell: bash
 
     - name: "Setup MySQL"
       uses: mirromutth/mysql-action@v1.1
-      timeout-minutes: 1
       with:
         host port: ${{ inputs.db_port }}
         container port: ${{ inputs.db_port }}
@@ -50,7 +48,6 @@ runs:
 
     - name: Setup PHP, with composer and extensions
       uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
-      timeout-minutes: 3
       with:
         php-version: ${{ inputs.php_version }}
         extensions: mbstring, dom, fileinfo, mysql
@@ -78,7 +75,6 @@ runs:
           sleep 1
         done
       shell: bash
-      timeout-minutes: 1
       
     - name: Debug MySQL version
       run: |
