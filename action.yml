@@ -1,4 +1,5 @@
 name: "Setup PHP and Mysql"
+timeout-minutes: 1
 
 inputs:
   php_version:
