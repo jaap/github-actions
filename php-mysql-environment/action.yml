@@ -28,7 +28,6 @@ inputs:
   sd_github_access_token:
     description: 'Access token to set before running composer.'
     required: false
-    default: false
   extensions:
     description: 'Setup PHP extensions.'
     required: false
@@ -83,9 +82,16 @@ runs:
         key: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-
 
+### If not supported (yet) https://github.com/actions/runner/issues/834
     - name: Link github token to composer; allows accesing sundata-package on github
-      if: ${{ inputs.sd_github_access_token }}
-      run: composer config -g github-oauth.github.com ${{ inputs.sd_github_access_token }}
+      run: |
+        if echo false | grep -c "false"
+        then
+          echo "No key to set for composer"
+        else
+          composer config -g github-oauth.github.com ${{ inputs.sd_github_access_token }}
+        fi
+      shell: bash
 
     - name: Install Composer dependencies
       run: composer install --no-progress --prefer-dist --optimize-autoloader
