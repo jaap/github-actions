@@ -53,6 +53,10 @@ runs:
       run: composer install --no-progress --prefer-dist --optimize-autoloader
       shell: bash
 
+    - name: Shutdown Ubuntu MySQL (SUDO)
+      run: sudo service mysql stop
+      shell: bash
+
     - name: "Setup MySQL"
       uses: mirromutth/mysql-action@v1.1
       with:
