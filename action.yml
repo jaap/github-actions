@@ -47,7 +47,8 @@ runs:
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: ${{ runner.os }}-composer-
+        restore-keys: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-
+
     - name: Install Composer dependencies
       run: composer install --no-progress --prefer-dist --optimize-autoloader
       shell: bash
@@ -71,3 +72,13 @@ runs:
           sleep 1
         done
       shell: bash
+      
+    - name: Echo PHP and MySQL version for debug purposes
+      run: |
+        echo '-------- [MySQL] --------'
+        mysqld --version
+        echo '--------- [PHP] ---------'
+        php -v
+        echo '-------------------------'
+      shell: bash
+
