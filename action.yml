@@ -33,9 +33,11 @@ runs:
     - name: Shutdown Ubuntu MySQL (SUDO)
       run: sudo service mysql stop
       shell: bash
+      timeout-minutes: 1
 
     - name: "Setup MySQL"
       uses: mirromutth/mysql-action@v1.1
+      timeout-minutes: 1
       with:
         host port: ${{ inputs.db_port }}
         container port: ${{ inputs.db_port }}
@@ -47,6 +49,7 @@ runs:
         mysql password: ${{ inputs.db_password }}
 
     - name: Setup PHP, with composer and extensions
+      timeout-minutes: 3
       uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
       with:
         php-version: ${{ inputs.php_version }}
@@ -70,6 +73,7 @@ runs:
       shell: bash
       
     - name: Wait for MySQL
+      timeout-minutes: 1
       run: |
         while ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent; do
           sleep 1
