@@ -1,5 +1,4 @@
 name: "Setup PHP and Mysql"
-timeout-minutes: 1
 
 inputs:
   php_version:
@@ -47,19 +46,6 @@ runs:
         mysql user: ${{ inputs.db_username }}
         mysql password: ${{ inputs.db_password }}
 
-    - name: Wait for MySQL
-      run: |
-        while ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent; do
-          sleep 1
-        done
-      shell: bash
-      
-    - name: Debug, show db's for user
-      run: |
-        mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "show databases;"
-        mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "SHOW VARIABLES LIKE \"%version%\";"
-      shell: bash
-
     - name: Setup PHP, with composer and extensions
       uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
       with:
@@ -83,12 +69,15 @@ runs:
       run: composer install --no-progress --prefer-dist --optimize-autoloader
       shell: bash
       
-    - name: Echo PHP and MySQL version for debug purposes
+    - name: Wait for MySQL
       run: |
-        echo '-------- [MySQL] --------'
-        mysqld --version
-        echo '--------- [PHP] ---------'
-        php -v
-        echo '-------------------------'
+        while ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent; do
+          sleep 1
+        done
+      shell: bash
+      
+    - name: Debug MySQL version
+      run: |
+        mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "SHOW VARIABLES LIKE \"%version%\";"
       shell: bash
 
