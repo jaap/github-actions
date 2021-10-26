@@ -79,7 +79,7 @@ runs:
       
     - name: Debug, show db's for user
       run: |
-        mysql --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} –e “show databases;”
+        mysql --host=127.0.0.1 -u root -ppass --port=${{ inputs.db_port }} -e "show databases;"
       shell: bash
       
     - name: Echo PHP and MySQL version for debug purposes
