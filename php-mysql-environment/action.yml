@@ -102,7 +102,12 @@ runs:
       shell: bash
 
     - name: Wait for MySQL
-      run: "${GITHUB_WORKSPACE}/php-mysql-environment/ping_mysql.sh"
+      run: |
+        COUNT=0
+        ATTEMPTS=30
+        until [[ ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent; ]] || [[ $COUNT -eq $ATTEMPTS ]]; do
+          sleep 1
+        done
       shell: bash
 
     - name: Debug MySQL version
