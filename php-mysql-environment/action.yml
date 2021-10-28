@@ -105,7 +105,7 @@ runs:
       run: |
         COUNT=0
         ATTEMPTS=30
-        until [[ mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent; ]] || [[ $COUNT -eq $ATTEMPTS ]]; do
+        until [[ mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent ]]; || [[ $COUNT -eq $ATTEMPTS ]]; do
           echo -e "$(( COUNT++ ))... \c"
           sleep 1
         done
