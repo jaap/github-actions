@@ -89,7 +89,7 @@ runs:
 ### If not supported (yet) https://github.com/actions/runner/issues/834
     - name: Link github token to composer; allows accesing sundata-package on github
       run: |
-        if echo false | grep -c "false"
+        if echo ${{ inputs.sd_github_access_token }} | grep -c "false"
         then
           echo "No key to set for composer"
         else
