@@ -40,6 +40,10 @@ inputs:
   tools:
     description: 'Setup popular tools globally.'
     required: false
+  composer_install:
+    required: false
+    default: 'composer install --no-progress --prefer-dist --optimize-autoloader'
+    description: "Custom composer install command"
 
 runs:
   using: "composite"
@@ -94,7 +98,7 @@ runs:
       shell: bash
 
     - name: Install Composer dependencies
-      run: composer install --no-progress --prefer-dist --optimize-autoloader
+      run: ${{ inputs.composer_install }}
       shell: bash
 
     - name: Wait for MySQL
