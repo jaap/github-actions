@@ -41,10 +41,10 @@ inputs:
   tools:
     description: 'Setup popular tools globally.'
     required: false
-  composer_install:
+  composer_install_options:
     required: false
-    default: 'composer install --no-progress --prefer-dist --optimize-autoloader'
-    description: "Custom composer install command"
+    default: '--no-progress --prefer-dist --optimize-autoloader'
+    description: "Custom composer install options"
 
 runs:
   using: "composite"
@@ -99,7 +99,7 @@ runs:
       shell: bash
 
     - name: Install Composer dependencies
-      run: ${{ inputs.composer_install }}
+      run: composer install ${{ inputs.composer_install_options }}
       shell: bash
 
     - name: Wait for MySQL
@@ -113,6 +113,9 @@ runs:
       shell: bash
 
     - name: Debug MySQL version
-      run: |
-        mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "SHOW VARIABLES LIKE \"%version%\";"
+      run: mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "SHOW VARIABLES LIKE \"%version%\";"
+      shell: bash
+
+    - name: Debug PHP version
+      run: php -v
       shell: bash
