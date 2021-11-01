@@ -50,6 +50,9 @@ runs:
   using: "composite"
   steps:
 
+    - name: Test defaults
+      run: echo ${{ inputs.db_username }}
+
     - name: Shutdown Ubuntu MySQL (SUDO)
       run: sudo service mysql stop
       shell: bash
