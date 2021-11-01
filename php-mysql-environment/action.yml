@@ -10,17 +10,17 @@ inputs:
     default: '5.7'
     required: false
   db_name:
-    description: "The DB name. Default is [test]"
+    description: "The DB name. Default is [test_db]"
     required: false
-    default: 'test'
+    default: 'test_db'
   db_username:
-    description: "The DB username. Default is [user]"
+    description: "The DB username. Default is [test_user]"
     required: false
-    default: 'user'
+    default: 'test_user'
   db_password:
     required: false
-    default: 'password'
-    description: "The DB password. Default is [password]"
+    default: 'test_password'
+    description: "The DB password. Default is [test_password]"
   db_port:
     description: "The DB port. Default is [3306]"
     required: false
