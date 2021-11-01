@@ -127,7 +127,8 @@ runs:
       run: php -v
       shell: bash
 
-    - uses: actions/upload-artifact@v1
+    - name: Store logs in artifact
+      uses: actions/upload-artifact@v1
         with:
             name: laravel-failure-artifact
             path: storage/logs/*
