@@ -1,38 +1,38 @@
 name: "Setup PHP and Mysql"
 
 inputs:
-  phpVersion:
-    description: 'The PHP version to run'
+  php_version:
+    description: "The PHP version to run"
     default: '7.4'
     required: false
-  mysqlVersion:
-    description: 'The MySQL version to run'
+  mysql_version:
+    description: "The MySQL version to run"
     default: '5.7'
     required: false
-  dbName:
-    description: 'The DB name. Default is [test_db]'
+  db_name:
+    description: "The DB name. Default is [test_db]"
     required: false
     default: 'test_db'
-  dbUsername:
-    description: 'The DB username. Default is [test_user]'
+  db_username:
+    description: "The DB username. Default is [test_user]"
     required: false
     default: 'test_user'
-  dbPassword:
+  db_password:
     required: false
     default: 'test_password'
-    description: 'The DB password. Default is [test_password]'
-  dbPort:
+    description: "The DB password. Default is [test_password]"
+  db_port:
     description: "The DB port. Default is [3306]"
     required: false
     default: '3306'
-  sdGithubAccessToken:
+  sd_github_access_token:
     description: 'Access token to set before running composer.'
     default: 'false' #a bit hacky
     required: false
   extensions:
     description: 'Setup PHP extensions.'
     required: false
-  iniValues:
+  ini-values:
     description: 'Add values to php.ini.'
     required: false
   coverage:
@@ -41,7 +41,7 @@ inputs:
   tools:
     description: 'Setup popular tools globally.'
     required: false
-  composerInstallOptions:
+  composer_install_options:
     required: false
     default: '--no-progress --prefer-dist --optimize-autoloader'
     description: "Custom composer install options"
@@ -51,11 +51,10 @@ runs:
   steps:
 
     - name: Test defaults
-      run: echo ${{ inputs.dbUsername }}
-      shell: bash
-
-    - name: Test defaults
-      run: echo ${{ inputs.composerInstallOptions }}
+      run: |
+        echo DN Username ${{ inputs.db_username }}
+        echo PHP version ${{ inputs.php_version }}
+        echo ComInstall stuff ${{ inputs.composer_install_options }}
       shell: bash
 
     - name: Shutdown Ubuntu MySQL (SUDO)
@@ -65,21 +64,21 @@ runs:
     - name: "Setup MySQL"
       uses: mirromutth/mysql-action@v1.1
       with:
-        host port: ${{ inputs.dbPort }}
-        container port: ${{ inputs.dbPort }}
+        host port: ${{ inputs.db_port }}
+        container port: ${{ inputs.db_port }}
         character set server: 'utf8'
         collation server: 'utf8_general_ci'
-        mysql version: ${{ inputs.mysqlVersion }}
-        mysql database: ${{ inputs.dbName }}
-        mysql user: ${{ inputs.dbUsername }}
-        mysql password: ${{ inputs.dbPassword }}
+        mysql version: ${{ inputs.mysql_version }}
+        mysql database: ${{ inputs.db_name }}
+        mysql user: ${{ inputs.db_username }}
+        mysql password: ${{ inputs.db_password }}
 
     - name: Setup PHP, with composer and extensions
       uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
       with:
-        php-version: ${{ inputs.phpVersion }}
+        php-version: ${{ inputs.php_version }}
         extensions: ${{ inputs.php_extensions }}
-        iniValues: ${{ inputs.php_iniValues }}
+        ini-values: ${{ inputs.php_ini-values }}
         coverage: ${{ inputs.php_coverage }}
         tools: ${{ inputs.php_tools }}
 
@@ -92,27 +91,27 @@ runs:
       uses: actions/cache@v2
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
-        key: ${{ runner.os }}-PHP${{ inputs.phpVersion }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: ${{ runner.os }}-PHP${{ inputs.phpVersion }}-composer-
+        key: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-
 
 ### If not supported (yet) https://github.com/actions/runner/issues/834
     - name: Link github token to composer; allows accesing sundata-package on github
       run: |
-        if echo ${{ inputs.sdGithubAccessToken }} | grep -c "false"
+        if echo ${{ inputs.sd_github_access_token }} | grep -c "false"
         then
           echo "No key to set for composer"
         else
-          composer config -g github-oauth.github.com ${{ inputs.sdGithubAccessToken }}
+          composer config -g github-oauth.github.com ${{ inputs.sd_github_access_token }}
         fi
       shell: bash
 
     - name: Install Composer dependencies
-      run: composer install ${{ inputs.composerInstallOptions }}
+      run: composer install ${{ inputs.composer_install_options }}
       shell: bash
 
     - name: Wait for MySQL
       run: |
-        while ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.dbPassword }} --user=${{ inputs.dbUsername }} --port=${{ inputs.dbPort }} --silent
+        while ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent
         do
             echo "Waiting for MySQL..."
             ((count++)) && ((count==30)) && break
@@ -121,7 +120,7 @@ runs:
       shell: bash
 
     - name: Debug MySQL version
-      run: mysql --host=127.0.0.1 -u ${{ inputs.dbUsername }} -p${{ inputs.dbPassword }} --port=${{ inputs.dbPort }} -e "SHOW VARIABLES LIKE \"%version%\";"
+      run: mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "SHOW VARIABLES LIKE \"%version%\";"
       shell: bash
 
     - name: Debug PHP version
