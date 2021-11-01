@@ -51,7 +51,7 @@ runs:
   steps:
 
     - name: Test defaults
-      run: echo ${{ inputs.db_username }}
+      run: echo ${{ inputs.mysql_version }}
       shell: bash
 
     - name: Shutdown Ubuntu MySQL (SUDO)
