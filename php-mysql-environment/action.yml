@@ -52,6 +52,7 @@ runs:
 
     - name: Test defaults
       run: echo ${{ inputs.db_username }}
+      shell: bash
 
     - name: Shutdown Ubuntu MySQL (SUDO)
       run: sudo service mysql stop
