@@ -54,6 +54,10 @@ runs:
       run: echo ${{ inputs.dbUsername }}
       shell: bash
 
+    - name: Test defaults
+      run: echo ${{ inputs.composerInstallOptions }}
+      shell: bash
+
     - name: Shutdown Ubuntu MySQL (SUDO)
       run: sudo service mysql stop
       shell: bash
