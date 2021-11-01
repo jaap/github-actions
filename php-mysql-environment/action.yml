@@ -1,11 +1,7 @@
 name: "Setup PHP and Mysql"
 
 inputs:
-  numOctocats:
-    description: 'Number of Octocats'
-    required: false
-    default: '42'
-  php_version:
+  phpVersion:
     description: "The PHP version to run"
     default: '7.4'
     required: false
@@ -13,30 +9,30 @@ inputs:
     description: "The MySQL version to run"
     default: '5.7'
     required: false
-  db_name:
+  dbName:
     description: "The DB name. Default is [test_db]"
     required: false
     default: 'test_db'
-  db_username:
+  dbUsername:
     description: "The DB username. Default is [test_user]"
     required: false
     default: 'test_user'
-  db_password:
+  dbPassword:
     required: false
     default: 'test_password'
     description: "The DB password. Default is [test_password]"
-  db_port:
+  dbPort:
     description: "The DB port. Default is [3306]"
     required: false
     default: '3306'
-  sd_github_access_token:
+  sdGithubAccessToken:
     description: 'Access token to set before running composer.'
     default: 'false' #a bit hacky
     required: false
   extensions:
     description: 'Setup PHP extensions.'
     required: false
-  ini-values:
+  iniValues:
     description: 'Add values to php.ini.'
     required: false
   coverage:
@@ -45,7 +41,7 @@ inputs:
   tools:
     description: 'Setup popular tools globally.'
     required: false
-  composer_install_options:
+  composerInstallOptions:
     required: false
     default: '--no-progress --prefer-dist --optimize-autoloader'
     description: "Custom composer install options"
@@ -55,11 +51,7 @@ runs:
   steps:
 
     - name: Test defaults
-      run: echo ${{ inputs.numOctocats }}
-      shell: bash
-
-    - name: Test defaults
-      run: echo ${{ inputs.mysqlVersion }}
+      run: echo ${{ inputs.dbUsername }}
       shell: bash
 
     - name: Shutdown Ubuntu MySQL (SUDO)
@@ -69,21 +61,21 @@ runs:
     - name: "Setup MySQL"
       uses: mirromutth/mysql-action@v1.1
       with:
-        host port: ${{ inputs.db_port }}
-        container port: ${{ inputs.db_port }}
+        host port: ${{ inputs.dbPort }}
+        container port: ${{ inputs.dbPort }}
         character set server: 'utf8'
         collation server: 'utf8_general_ci'
-        mysql version: ${{ inputs.mysql_version }}
-        mysql database: ${{ inputs.db_name }}
-        mysql user: ${{ inputs.db_username }}
-        mysql password: ${{ inputs.db_password }}
+        mysql version: ${{ inputs.mysqlVersion }}
+        mysql database: ${{ inputs.dbName }}
+        mysql user: ${{ inputs.dbUsername }}
+        mysql password: ${{ inputs.dbPassword }}
 
     - name: Setup PHP, with composer and extensions
       uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
       with:
-        php-version: ${{ inputs.php_version }}
+        php-version: ${{ inputs.phpVersion }}
         extensions: ${{ inputs.php_extensions }}
-        ini-values: ${{ inputs.php_ini-values }}
+        iniValues: ${{ inputs.php_iniValues }}
         coverage: ${{ inputs.php_coverage }}
         tools: ${{ inputs.php_tools }}
 
@@ -96,27 +88,27 @@ runs:
       uses: actions/cache@v2
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
-        key: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-
+        key: ${{ runner.os }}-PHP${{ inputs.phpVersion }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-PHP${{ inputs.phpVersion }}-composer-
 
 ### If not supported (yet) https://github.com/actions/runner/issues/834
     - name: Link github token to composer; allows accesing sundata-package on github
       run: |
-        if echo ${{ inputs.sd_github_access_token }} | grep -c "false"
+        if echo ${{ inputs.sdGithubAccessToken }} | grep -c "false"
         then
           echo "No key to set for composer"
         else
-          composer config -g github-oauth.github.com ${{ inputs.sd_github_access_token }}
+          composer config -g github-oauth.github.com ${{ inputs.sdGithubAccessToken }}
         fi
       shell: bash
 
     - name: Install Composer dependencies
-      run: composer install ${{ inputs.composer_install_options }}
+      run: composer install ${{ inputs.composerInstallOptions }}
       shell: bash
 
     - name: Wait for MySQL
       run: |
-        while ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.db_password }} --user=${{ inputs.db_username }} --port=${{ inputs.db_port }} --silent
+        while ! mysqladmin ping --host=127.0.0.1 --password=${{ inputs.dbPassword }} --user=${{ inputs.dbUsername }} --port=${{ inputs.dbPort }} --silent
         do
             echo "Waiting for MySQL..."
             ((count++)) && ((count==30)) && break
@@ -125,7 +117,7 @@ runs:
       shell: bash
 
     - name: Debug MySQL version
-      run: mysql --host=127.0.0.1 -u ${{ inputs.db_username }} -p${{ inputs.db_password }} --port=${{ inputs.db_port }} -e "SHOW VARIABLES LIKE \"%version%\";"
+      run: mysql --host=127.0.0.1 -u ${{ inputs.dbUsername }} -p${{ inputs.dbPassword }} --port=${{ inputs.dbPort }} -e "SHOW VARIABLES LIKE \"%version%\";"
       shell: bash
 
     - name: Debug PHP version
