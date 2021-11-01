@@ -126,10 +126,3 @@ runs:
     - name: Debug PHP version
       run: php -v
       shell: bash
-
-    - name: Store logs in artifact
-      uses: actions/upload-artifact@v1
-        with:
-            name: laravel-failure-artifact
-            path: storage/logs/*
-            retention-days: 5
