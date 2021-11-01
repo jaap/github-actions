@@ -2,27 +2,27 @@ name: "Setup PHP and Mysql"
 
 inputs:
   php_version:
-    description: "The PHP version to run"
+    description: 'The PHP version to run'
     default: '7.4'
     required: false
   mysql_version:
-    description: "The MySQL version to run"
+    description: 'The MySQL version to run'
     default: '5.7'
     required: false
   db_name:
-    description: "The DB name. Default is [test_db]"
+    description: 'The DB name. Default is [test_db]'
     required: false
     default: 'test_db'
   db_username:
-    description: "The DB username. Default is [test_user]"
+    description: 'The DB username. Default is [test_user]'
     required: false
     default: 'test_user'
   db_password:
     required: false
     default: 'test_password'
-    description: "The DB password. Default is [test_password]"
+    description: 'The DB password. Default is [test_password]'
   db_port:
-    description: "The DB port. Default is [3306]"
+    description: 'The DB port. Default is [3306]'
     required: false
     default: '3306'
   sd_github_access_token:
@@ -52,7 +52,7 @@ runs:
 
     - name: Test defaults
       run: |
-        echo DN Username ${{ inputs.db_username }}
+        echo DB Username ${{ inputs.db_username }}
         echo PHP version ${{ inputs.php_version }}
         echo ComInstall stuff ${{ inputs.composer_install_options }}
       shell: bash
@@ -126,3 +126,9 @@ runs:
     - name: Debug PHP version
       run: php -v
       shell: bash
+
+    - uses: actions/upload-artifact@v1
+        with:
+            name: laravel-failure-artifact
+            path: storage/logs/*
+            retention-days: 5
