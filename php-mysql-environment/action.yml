@@ -9,7 +9,7 @@ inputs:
     description: "The PHP version to run"
     default: '7.4'
     required: false
-  mysql_version:
+  mysqlVersion:
     description: "The MySQL version to run"
     default: '5.7'
     required: false
@@ -56,6 +56,10 @@ runs:
 
     - name: Test defaults
       run: echo ${{ inputs.numOctocats }}
+      shell: bash
+
+    - name: Test defaults
+      run: echo ${{ inputs.mysqlVersion }}
       shell: bash
 
     - name: Shutdown Ubuntu MySQL (SUDO)
