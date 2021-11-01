@@ -2,25 +2,25 @@ name: "Setup PHP and Mysql"
 
 inputs:
   phpVersion:
-    description: "The PHP version to run"
+    description: 'The PHP version to run'
     default: '7.4'
     required: false
   mysqlVersion:
-    description: "The MySQL version to run"
+    description: 'The MySQL version to run'
     default: '5.7'
     required: false
   dbName:
-    description: "The DB name. Default is [test_db]"
+    description: 'The DB name. Default is [test_db]'
     required: false
     default: 'test_db'
   dbUsername:
-    description: "The DB username. Default is [test_user]"
+    description: 'The DB username. Default is [test_user]'
     required: false
     default: 'test_user'
   dbPassword:
     required: false
     default: 'test_password'
-    description: "The DB password. Default is [test_password]"
+    description: 'The DB password. Default is [test_password]'
   dbPort:
     description: "The DB port. Default is [3306]"
     required: false
