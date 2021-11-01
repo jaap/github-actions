@@ -1,6 +1,10 @@
 name: "Setup PHP and Mysql"
 
 inputs:
+  numOctocats:
+    description: 'Number of Octocats'
+    required: false
+    default: '42'
   php_version:
     description: "The PHP version to run"
     default: '7.4'
@@ -51,7 +55,7 @@ runs:
   steps:
 
     - name: Test defaults
-      run: echo ${{ inputs.mysql_version }}
+      run: echo ${{ inputs.numOctocats }}
       shell: bash
 
     - name: Shutdown Ubuntu MySQL (SUDO)
