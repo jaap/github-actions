@@ -19,6 +19,11 @@ runs:
         coverage: ${{ inputs.php_coverage }}
         tools: ${{ inputs.php_tools }}
 
+    - name: What is here?
+      run: |
+        ls -a
+      shell: bash
+
     - name: Remove project composer and install phpstan
       run: |
         rm composer.json composer.lock
