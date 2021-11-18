@@ -25,8 +25,8 @@ runs:
         then
           echo "Using provided phpstan.neon file"
         else
-          echo "No phpstan.neon found. Getting the default one."
-          wget https://raw.githubusercontent.com/frittsnl/github-actions/master/larastan/action.yml
+          echo "No phpstan.neon found. Getting the default one." &&
+          wget https://raw.githubusercontent.com/frittsnl/github-actions/master/larastan/phpstan.neon
         fi
       shell: bash
 
