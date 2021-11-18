@@ -17,8 +17,6 @@ parameters:
         - '#Unsafe usage of new static#'
 
     excludePaths:
-        - ./app/Data/Weather/WeatherApi.php
-        - ./app/Domain/Radiation/RadiationHelper.php
 
     checkMissingIterableValueType: false
 
