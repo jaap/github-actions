@@ -5,6 +5,10 @@ inputs:
     description: 'The PHP version to run'
     default: '7.4'
     required: false
+  composer_install_options:
+    required: false
+    default: '--no-progress --prefer-dist --optimize-autoloader'
+    description: "Custom composer install options"
 
 runs:
   using: "composite"
@@ -26,8 +30,11 @@ runs:
         fi
       shell: bash
 
+    - name: Install Composer dependencies
+      run: composer install ${{ inputs.composer_install_options }}
+      shell: bash
+
     - name: Remove project composer and install phpstan
       run: |
-        rm composer.json composer.lock
         composer require --dev spaze/phpstan-disallowed-calls nunomaduro/larastan
       shell: bash
