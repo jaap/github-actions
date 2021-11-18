@@ -1,0 +1,30 @@
+name: "Setup PHP and Mysql"
+
+inputs:
+  php_version:
+    description: 'The PHP version to run'
+    default: '7.4'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Setup PHP, with composer and extensions
+      uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+      with:
+        php-version: ${{ inputs.php_version }}
+        extensions: ${{ inputs.php_extensions }}
+        ini-values: ${{ inputs.php_ini-values }}
+        coverage: ${{ inputs.php_coverage }}
+        tools: ${{ inputs.php_tools }}
+
+    - name: Remove project composer and install phpstan
+      run: |
+        rm composer.json composer.lock
+        composer require --dev spaze/phpstan-disallowed-calls nunomaduro/larastan
+      shell: bash
+
+    - name: Run Static Code Analysis
+      run: ./vendor/bin/phpstan analyse
+      shell: bash
