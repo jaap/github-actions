@@ -24,7 +24,3 @@ runs:
         rm composer.json composer.lock
         composer require --dev spaze/phpstan-disallowed-calls nunomaduro/larastan
       shell: bash
-
-    - name: Run Static Code Analysis
-      run: ./vendor/bin/phpstan analyse
-      shell: bash
