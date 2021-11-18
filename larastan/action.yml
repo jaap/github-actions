@@ -21,12 +21,8 @@ runs:
 
     - name: Is there a config file?
       run: |
-        test -f phpstan.neon
-        then
-          echo "Using provided phpstan.neon file"
-        else
-          echo "No phpstan.neon found. Getting the default one." &&
-          wget https://raw.githubusercontent.com/frittsnl/github-actions/master/larastan/phpstan.neon
+        if [[ ! -f "phpstan.neon" ]]; then
+        wget https://raw.githubusercontent.com/frittsnl/github-actions/master/larastan/phpstan.neon
         fi
       shell: bash
 
