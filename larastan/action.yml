@@ -19,9 +19,15 @@ runs:
         coverage: ${{ inputs.php_coverage }}
         tools: ${{ inputs.php_tools }}
 
-    - name: What is here?
+    - name: Is there a config file?
       run: |
-        ls -a
+        test -f phpstan.neon
+        then
+          echo "Using provided phpstan.neon file"
+        else
+          echo "No phpstan.neon found. Getting the default one."
+          wget https://raw.githubusercontent.com/frittsnl/github-actions/master/larastan/action.yml
+        fi
       shell: bash
 
     - name: Remove project composer and install phpstan
