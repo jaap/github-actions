@@ -7,7 +7,6 @@ parameters:
     paths:
         - app
         - routes
-        - requests
         - resources
 
     # The level 9 is the highest level
