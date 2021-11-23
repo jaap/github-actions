@@ -34,7 +34,7 @@ runs:
       run: composer install ${{ inputs.composer_install_options }}
       shell: bash
 
-    - name: Remove project composer and install phpstan
+    - name: Install phpstan
       run: |
         composer require spaze/phpstan-disallowed-calls nunomaduro/larastan ${{ inputs.composer_install_options }}
       shell: bash
