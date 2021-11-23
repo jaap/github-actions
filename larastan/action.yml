@@ -9,6 +9,10 @@ inputs:
     required: false
     default: '--no-progress --prefer-dist --optimize-autoloader'
     description: "Custom composer install options"
+  sd_github_access_token:
+    description: 'Access token to set before running composer.'
+    default: 'false' #a bit hacky
+    required: false
 
 runs:
   using: "composite"
@@ -27,6 +31,17 @@ runs:
       run: |
         if [[ ! -f "phpstan.neon" ]]; then
         wget https://raw.githubusercontent.com/frittsnl/github-actions/master/larastan/phpstan.neon
+        fi
+      shell: bash
+
+    ### If not supported (yet) https://github.com/actions/runner/issues/834
+    - name: Link github token to composer; allows accesing sundata-package on github
+      run: |
+        if echo ${{ inputs.sd_github_access_token }} | grep -c "false"
+        then
+          echo "No key to set for composer"
+        else
+          composer config -g github-oauth.github.com ${{ inputs.sd_github_access_token }}
         fi
       shell: bash
 

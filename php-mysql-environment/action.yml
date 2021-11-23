@@ -94,7 +94,7 @@ runs:
         key: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-
 
-### If not supported (yet) https://github.com/actions/runner/issues/834
+    ### If not supported (yet) https://github.com/actions/runner/issues/834
     - name: Link github token to composer; allows accesing sundata-package on github
       run: |
         if echo ${{ inputs.sd_github_access_token }} | grep -c "false"
