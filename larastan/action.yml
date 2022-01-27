@@ -51,5 +51,5 @@ runs:
 
     - name: Install phpstan
       run: |
-        composer require spaze/phpstan-disallowed-calls nunomaduro/larastan ${{ inputs.composer_install_options }}
+        composer require spaze/phpstan-disallowed-calls nunomaduro/larastan:^1.4 ${{ inputs.composer_install_options }}
       shell: bash
