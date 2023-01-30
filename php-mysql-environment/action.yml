@@ -88,7 +88,7 @@ runs:
       shell: bash
 
     - name: Cache composer dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-PHP${{ inputs.php_version }}-composer-${{ hashFiles('**/composer.lock') }}
